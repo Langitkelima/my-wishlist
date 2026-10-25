@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f7f8f4">
+  <title>Wishlist — Ruang Impianmu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#f7f8f4;--paper:#fff;--ink:#18372f;--muted:#7b8881;--line:#e7ebe4;
+      --green:#204d40;--green2:#37735c;--mint:#e6f3e8;--coral:#f39175;--peach:#fff0e9;
+      --gold:#e9b858;--shadow:0 12px 34px rgba(24,55,47,.045);--r:22px
+    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "DM Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+    button,input,textarea,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:wait}
+    a{color:inherit}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid #8fb9a1;outline-offset:3px}
+    [hidden]{display:none!important}svg{display:block}
+    .ico{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:19px;height:19px;vertical-align:middle}
+    .ico svg{width:100%;height:100%;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .app-shell{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
+    .sidebar{background:#fff;border-right:1px solid var(--line);padding:33px 19px 24px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;z-index:10}
+    .brand{display:flex;align-items:center;gap:10px;margin:4px 11px 48px;text-decoration:none;color:var(--ink)}
+    .brand-symbol{height:42px;width:42px;border-radius:14px;background:var(--green);color:#fff;display:grid;place-items:center;box-shadow:0 8px 15px #204d4026}
+    .brand-symbol .ico{width:24px;height:24px}
+    .brand-name{font-weight:800;font-size:23px;letter-spacing:-1.1px}.brand-name b{color:var(--coral)}
+    .nav-label{color:#a2aaa3;font-size:10px;letter-spacing:2px;font-weight:800;margin:0 13px 13px;text-transform:uppercase}
+    .side-nav{display:grid;gap:6px}
+    .nav-btn{border:0;border-radius:12px;width:100%;text-align:left;display:flex;align-items:center;gap:12px;color:#708078;background:transparent;padding:12px 13px;font-weight:700;transition:.18s}
+    .nav-btn:hover{background:#f4f7f2;color:var(--ink)}
+    .nav-btn.active{background:#e9f3e9;color:var(--green)}
+    .nav-btn .nav-count{margin-left:auto;font-size:11px;color:#8d9b91;font-weight:800}
+    .nav-btn.active .nav-count{color:var(--green)}
+    .sidebar-spacer{flex:1}
+    .sidebar-note{background:#f2f7ee;border-radius:18px;padding:20px 18px;position:relative;overflow:hidden}
+    .sidebar-note::after{content:"✦";font:70px "DM Serif Display",serif;color:#d6e7d3;position:absolute;right:8px;top:-28px}
+    .sidebar-note strong{display:block;font-size:14px;position:relative;z-index:1}.sidebar-note p{margin:7px 0 0;color:#829487;font-size:12px;line-height:1.7;position:relative;z-index:1}
+    .side-footer{margin:22px 10px 0;display:flex;align-items:center;gap:8px;font-size:11px;color:#99a49d}
+    .connect-dot{width:8px;height:8px;border-radius:50%;background:#cad4c7}.connect-dot.good{background:#62b888}.connect-dot.demo{background:#e9b858}
+    .workspace{max-width:1530px;padding:25px clamp(20px,4vw,65px) 70px;width:100%;margin:0 auto;min-width:0}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 29px}
+    .crumb{color:#94a29a;font-size:13px;font-weight:600}.crumb strong{color:var(--ink);font-weight:800}
+    .top-actions{display:flex;align-items:center;gap:12px}
+    .mode-pill{border:1px solid #dce8dc;background:#f1f7ef;border-radius:30px;color:#4b7c5d;padding:9px 13px;font-size:11px;font-weight:800;white-space:nowrap}
+    .avatar{height:38px;width:38px;border-radius:13px;background:#ecd7c6;color:#7b523e;display:grid;place-items:center;font-weight:800}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:1px solid transparent;font-weight:800;border-radius:12px;padding:12px 18px;transition:transform .15s,background .2s,box-shadow .2s;white-space:nowrap}
+    .btn:hover:not(:disabled){transform:translateY(-2px)}.btn.primary{background:var(--green);color:#fff;box-shadow:0 8px 20px #1c543b22}.btn.primary:hover{background:#32634f}
+    .btn.light{border-color:var(--line);background:white;color:var(--ink)}.btn.peach{background:#ffebe4;color:#8e4839}
+    .btn.danger{background:#fff2ef;color:#bf554d;border-color:#f7dbd6}
+    .btn.full{width:100%}.btn .ico{width:18px;height:18px}
+    .hero{background:var(--green);border-radius:27px;color:#fff;min-height:290px;position:relative;overflow:hidden;display:flex;align-items:stretch;box-shadow:0 20px 45px #2353421a}
+    .hero-copy{width:59%;padding:36px clamp(30px,4vw,58px);position:relative;z-index:2}
+    .eyebrow{font-weight:800;letter-spacing:2.2px;font-size:10px;text-transform:uppercase;display:flex;align-items:center;gap:9px;color:#bcd8c6}
+    .eyebrow:before{content:"";height:7px;width:7px;background:var(--coral);border-radius:50%}
+    .hero h1{font:normal clamp(35px,4.4vw,62px)/1.02 "DM Serif Display",Georgia,serif;letter-spacing:-.8px;max-width:540px;margin:17px 0 12px}
+    .hero h1 em{color:#f5bd9a;font-weight:normal}
+    .hero p{max-width:370px;color:#bcd2c7;font-size:13px;line-height:1.7;margin:0 0 22px}
+    .hero .btn{background:#fff;color:var(--green);padding:11px 17px}
+    .hero-art{position:absolute;inset:0 0 0 50%;pointer-events:none}
+    .hero-art:before{content:"";width:390px;height:390px;border:1px solid #ffffff1c;border-radius:50%;position:absolute;right:-100px;top:-90px;box-shadow:0 0 0 56px #ffffff06,0 0 0 112px #ffffff06}
+    .floating-ticket{position:absolute;top:39px;right:22%;width:205px;height:220px;border-radius:21px;background:#faf4e8;transform:rotate(-11deg);box-shadow:0 20px 36px #09261d50;color:#26483f;padding:17px;display:flex;flex-direction:column;align-items:center;justify-content:space-between}
+    .ticket-header{width:100%;display:flex;justify-content:space-between;font-size:10px;font-weight:800;letter-spacing:1.2px}
+    .ticket-heart{width:94px;height:94px;background:#f8cdbd;border-radius:30px;display:grid;place-items:center;font-size:54px;transform:rotate(9deg);box-shadow:inset 0 -5px 12px #ed947b22}
+    .ticket-bottom{width:100%;border-top:2px dashed #ded9ce;padding-top:12px;display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800}
+    .ticket-bottom span:last-child{color:#8ba38c;font-size:10px}
+    .float-star{position:absolute;right:10%;top:28px;font-size:53px;color:#f5c68c;transform:rotate(18deg)}.float-circle{position:absolute;right:11%;bottom:30px;width:62px;height:62px;border-radius:50%;background:var(--coral)}
+    .section-eyebrow{font-size:10px;font-weight:800;letter-spacing:2.3px;text-transform:uppercase;color:#95a39a}
+    .stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:21px}
+    .stat-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:21px 23px;min-height:129px;box-shadow:var(--shadow)}
+    .stat-top{display:flex;align-items:center;justify-content:space-between;color:#8a968f;font-size:12px;font-weight:700}
+    .stat-icon{height:34px;width:34px;border-radius:11px;background:#edf3e7;color:#477f5e;display:grid;place-items:center}
+    .stat-icon.peachy{background:#fff0e8;color:#de8b6a}.stat-icon.sun{background:#fdf4db;color:#c7a047}
+    .stat-value{font-size:clamp(21px,2.7vw,34px);letter-spacing:-1.4px;font-weight:800;line-height:1.2;margin:12px 0 4px;white-space:nowrap}
+    .stat-foot{font-size:11px;color:#a1aca3}.mini-track{height:5px;background:#e9f0e8;border-radius:99px;overflow:hidden;margin-top:12px}
+    .mini-track>span{display:block;width:0;height:100%;background:#88bd91;border-radius:99px;transition:width .4s}
+    .collection-head{display:flex;justify-content:space-between;gap:10px;align-items:end;margin:39px 0 19px}
+    .collection-head h2{font:normal 33px/1.2 "DM Serif Display",Georgia,serif;letter-spacing:-.4px;margin:6px 0 5px}
+    .collection-head p{font-size:12px;color:#9ca79e;margin:0}
+    .collection-head .btn{padding:11px 16px}
+    .toolbar{display:flex;gap:10px;align-items:center;margin:18px 0 18px;flex-wrap:wrap}
+    .search-wrap{position:relative;flex:1;min-width:180px}.search-wrap .ico{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#a0aaa2;width:18px;height:18px}
+    .control{height:45px;border:1px solid #e5ebe4;border-radius:12px;background:#fff;color:var(--ink);padding:0 13px;outline:none}
+    .search-wrap .control{width:100%;padding-left:43px}
+    .control:focus{border-color:#88b698;box-shadow:0 0 0 3px #8bb99725}
+    .toolbar select{min-width:160px;font-size:12px;font-weight:700}
+    .chip-row{display:flex;gap:8px;overflow-x:auto;padding:2px 0 5px;scrollbar-width:none}.chip-row::-webkit-scrollbar{display:none}
+    .chip{white-space:nowrap;border:1px solid #e5eae3;background:#fff;border-radius:999px;color:#8a978d;padding:9px 15px;font-size:12px;font-weight:800;transition:.2s}
+    .chip:hover{background:#edf5eb}.chip.active{background:var(--green);border-color:var(--green);color:#fff}
+    .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:17px}
+    .product-card{background:#fff;border-radius:20px;overflow:hidden;border:1px solid #e9ece5;min-width:0;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s}
+    .product-card:hover{transform:translateY(-4px);box-shadow:0 18px 36px #15382c13}
+    .product-image{height:174px;width:100%;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#e6f0e7}
+    .product-image img{height:100%;width:100%;object-fit:cover;display:block}
+    .product-image[data-color="1"]{background:#eae6f5}.product-image[data-color="2"]{background:#f9e9df}.product-image[data-color="3"]{background:#e6f0e9}.product-image[data-color="4"]{background:#e9edf7}.product-image[data-color="5"]{background:#f7edd8}
+    .product-emoji{font-size:73px;filter:drop-shadow(0 10px 9px #00000012);transform:rotate(-8deg)}
+    .priority-badge{position:absolute;top:13px;left:13px;padding:7px 10px;border-radius:9px;background:#ffffffed;font-weight:800;color:#566f5d;font-size:10px;box-shadow:0 4px 12px #0000000c}
+    .priority-badge.urgent{color:#bd685a}.priority-badge.normal{color:#9d7e3a}.priority-badge.low{color:#5c9273}
+    .img-action{position:absolute;bottom:12px;right:12px;width:32px;height:32px;background:#ffffffee;border-radius:11px;display:grid;place-items:center;color:#244739;box-shadow:0 5px 12px #00000010}
+    .product-info{padding:17px 17px 16px}
+    .product-category{font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:800;color:#9ba99e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .product-name{font-weight:800;margin:7px 0 9px;font-size:16px;letter-spacing:-.35px;min-height:42px;line-height:1.38;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .product-bottom{display:flex;align-items:center;justify-content:space-between;gap:6px}
+    .product-price{font-weight:800;font-size:18px;letter-spacing:-.55px}
+    .status-badge{border-radius:8px;padding:7px 8px;font-size:10px;font-weight:800;white-space:nowrap;color:#8a7b57;background:#fcf2d9}
+    .status-badge.bought{background:#e6f4eb;color:#4a9870}.status-badge.cancel{background:#f5eeeb;color:#9d9693}.status-badge.want{background:#fff0e8;color:#c8785b}
+    .product-open{width:100%;text-align:left;background:none;border:0;color:inherit;padding:0}
+    .empty-state{grid-column:1/-1;border:1px dashed #cbdacb;border-radius:25px;text-align:center;background:#fff;padding:52px 20px;color:var(--muted)}
+    .empty-icon{width:76px;height:76px;margin:0 auto 17px;border-radius:25px;background:#edf4e8;display:grid;place-items:center;font-size:35px}
+    .empty-state h3{font:normal 28px "DM Serif Display",serif;color:var(--ink);margin:0 0 8px}.empty-state p{margin:0 0 19px;font-size:13px}
+    .mobile-nav{display:none}
+    .overlay{position:fixed;inset:0;background:#12292080;backdrop-filter:blur(5px);z-index:30;animation:fadeIn .18s}
+    .dialog-overlay{display:flex;justify-content:center;align-items:center;padding:15px}
+    .dialog{width:min(760px,100%);max-height:min(91vh,970px);overflow:hidden;border-radius:24px;background:var(--paper);display:flex;flex-direction:column;box-shadow:0 30px 90px #10291b38;animation:riseIn .25s}
+    .dialog-head{display:flex;justify-content:space-between;align-items:start;gap:10px;padding:23px 27px 19px;border-bottom:1px solid var(--line)}
+    .dialog-eyebrow{color:#91a29a;letter-spacing:2px;font-size:10px;font-weight:800;text-transform:uppercase}
+    .dialog-head h2{font:normal 29px "DM Serif Display",Georgia,serif;line-height:1.1;margin:5px 0 0}
+    .icon-btn{border:1px solid var(--line);background:#fff;border-radius:12px;height:37px;width:37px;color:#738c79;display:grid;place-items:center;flex-shrink:0}
+    .icon-btn:hover{background:#f5f8f3}
+    .dialog-body{overflow-y:auto;padding:25px 27px 13px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}
+    .field{min-width:0}.field.span2{grid-column:span 2}
+    .field label,.label{display:block;margin-bottom:7px;font-size:12px;font-weight:800;color:#526359}
+    .field small{font-size:11px;color:#a5aea6}
+    .field input,.field select,.field textarea{width:100%;height:45px;border:1px solid #e2e9e1;background:#fafbf8;color:var(--ink);border-radius:11px;padding:10px 13px;outline:none}
+    .field textarea{min-height:82px;height:auto;resize:vertical}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:#7ea78a;box-shadow:0 0 0 3px #94c5a52b}
+    .field .money-input{position:relative}.money-input span{position:absolute;left:13px;top:12px;color:#91a097;font-weight:800;font-size:12px}.money-input input{padding-left:41px}
+    .radio-group{display:flex;gap:8px;flex-wrap:wrap}
+    .radio-pill{position:relative;display:inline-flex;cursor:pointer}.radio-pill input{position:absolute;opacity:0;width:1px;height:1px}
+    .radio-pill span{display:inline-block;background:#f8faf6;border:1px solid #e5eae3;padding:9px 12px;color:#68786d;border-radius:10px;font-weight:800;font-size:12px}
+    .radio-pill input:checked+span{background:#e6f4e9;color:#255c3c;border-color:#93bea0}
+    .radio-pill input:focus-visible+span{outline:3px solid #8fb9a1}
+    .upload-row{display:flex;gap:13px;align-items:center;background:#fafbf8;border:1px dashed #c7d9c8;border-radius:14px;padding:12px}
+    .upload-preview{height:72px;width:82px;flex-shrink:0;border-radius:12px;background:#edf4e8 center/cover no-repeat;display:grid;place-items:center;color:#819b86;font-size:26px}
+    .upload-help{font-size:11px;color:#96a198;margin-top:5px}
+    .dialog-footer{padding:16px 27px 21px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .form-message{flex:1;font-size:12px;color:#bf6256;min-width:0}
+    .drawer-overlay{display:flex;justify-content:flex-end}
+    .drawer{background:white;width:min(455px,100%);height:100%;overflow-y:auto;box-shadow:-25px 0 50px #0000001b;animation:slideIn .22s}
+    .drawer-header{display:flex;justify-content:space-between;align-items:center;padding:20px 24px}
+    .drawer-cover{height:225px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#eef2e6;font-size:94px}.drawer-cover img{width:100%;height:100%;object-fit:cover}
+    .drawer-main{padding:24px}
+    .drawer-main h2{font:normal 31px/1.15 "DM Serif Display",serif;margin:5px 0 6px;overflow-wrap:anywhere}
+    .drawer-price{font-size:28px;font-weight:800;letter-spacing:-1px;margin:15px 0}
+    .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:19px 0}
+    .detail-tile{background:#f7faf5;border-radius:13px;padding:13px}.detail-tile small{display:block;color:#a0ada1;font-size:11px;margin-bottom:5px}.detail-tile b{font-size:12px}
+    .detail-block{border-top:1px solid var(--line);padding-top:18px;margin-top:18px}.detail-block small{display:block;color:#8e9f92;font-weight:800;margin-bottom:8px;font-size:11px}.detail-block p{margin:0;color:#53655b;white-space:pre-wrap;overflow-wrap:anywhere}
+    .drawer-actions{display:flex;flex-wrap:wrap;gap:9px;margin:25px 0}.drawer-actions .btn{flex:1}
+    .toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);border-radius:13px;background:var(--ink);color:#fff;padding:13px 19px;z-index:80;box-shadow:0 20px 45px #1b3b2d3d;font-size:12px;font-weight:700;max-width:90vw;text-align:center;animation:riseIn .2s}
+    .auth-overlay{z-index:60;background:#eef4ec;display:grid;place-items:center;padding:20px}
+    .auth-card{width:min(450px,100%);background:#fff;border:1px solid #e4ece0;padding:32px;border-radius:28px;box-shadow:0 35px 85px #1e493524}
+    .auth-logo{width:48px;height:48px;background:var(--green);color:#fff;border-radius:17px;display:grid;place-items:center;margin-bottom:23px}
+    .auth-card h2{font:normal 37px "DM Serif Display",serif;margin:0 0 8px;line-height:1.1}
+    .auth-card p{color:#85958a;margin:0 0 22px;font-size:13px;line-height:1.7}.auth-card label{font-weight:800;font-size:12px;display:block;margin-bottom:8px}
+    .auth-card input{width:100%;height:46px;border:1px solid #dfe8dc;border-radius:11px;padding:10px 13px;outline:none;margin-bottom:14px}
+    .auth-card .btn{margin-top:2px}
+    .auth-alt{text-align:center;margin-top:23px;font-size:12px;color:#98a59b}.auth-alt button{border:0;background:none;color:#34765b;font-weight:800;text-decoration:underline;text-underline-offset:3px}
+    .auth-error{font-size:12px;color:#c1534c;margin:4px 0 10px}
+    .loading{padding:60px 20px;text-align:center;color:#97a79a}
+    .spinner{display:inline-block;height:24px;width:24px;border:3px solid #e2eae1;border-top-color:#34765b;border-radius:50%;animation:spin .75s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}@keyframes slideIn{from{transform:translateX(60px)}to{transform:translateX(0)}}
+    @media(min-width:1450px){.cards{grid-template-columns:repeat(4,minmax(0,1fr))}.product-image{height:193px}}
+    @media(max-width:1150px){.app-shell{grid-template-columns:208px minmax(0,1fr)}.sidebar{padding-left:13px;padding-right:13px}.workspace{padding:22px 27px 60px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-art{inset:0 0 0 47%}.floating-ticket{right:15%;transform:rotate(-10deg) scale(.88)}}
+    @media(max-width:760px){.app-shell{display:block}.sidebar{display:none}.workspace{padding:19px 18px 100px}.topbar{margin-bottom:19px}.topbar .desktop-add{display:none}.hero{min-height:262px}.hero-copy{width:80%;padding:31px 23px}.hero h1{font-size:39px;max-width:310px}.hero p{font-size:12px;max-width:240px}.hero-art{inset:0 -18px 0 61%;opacity:.42}.floating-ticket{right:-45px;top:61px;transform:rotate(-11deg) scale(.65)}.float-star{right:1%;top:20px;font-size:35px}.float-circle{right:-2%;bottom:0}.stat-grid{gap:9px}.stat-card{padding:13px 12px;min-height:111px;border-radius:15px}.stat-top{font-size:10px}.stat-icon{width:26px;height:26px;border-radius:8px}.stat-icon .ico{width:15px;height:15px}.stat-value{font-size:21px;letter-spacing:-1px;margin-top:12px}.stat-foot{font-size:10px}.collection-head{margin-top:32px}.collection-head h2{font-size:29px}.collection-head .btn{display:none}.mobile-nav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:20;padding:8px 17px calc(9px + env(safe-area-inset-bottom));background:#ffffffef;backdrop-filter:blur(20px);border-top:1px solid var(--line);align-items:center;justify-content:space-around}.mobile-nav button{border:0;background:none;display:flex;flex-direction:column;gap:4px;align-items:center;color:#9aaa9e;font-size:10px;font-weight:800;padding:8px 13px;border-radius:11px}.mobile-nav button.active{color:var(--green)}.mobile-nav button.add-nav{background:var(--green);color:white;border-radius:15px;width:51px;height:48px;justify-content:center;margin-top:-23px;box-shadow:0 9px 17px #204d4040}.mobile-nav button.add-nav .ico{width:24px;height:24px}.mobile-nav .ico{width:20px;height:20px}.drawer{padding-bottom:75px}}
+    @media(max-width:480px){.hero{min-height:258px}.hero-copy{width:83%}.hero h1{font-size:36px}.hero p{max-width:218px}.mode-pill{font-size:10px;padding:8px 9px}.top-actions{gap:8px}.avatar{width:34px;height:34px}.stat-grid{grid-template-columns:1fr 1fr}.stat-card:last-child{grid-column:span 2;min-height:92px}.stat-card:last-child .stat-value{margin-top:4px}.stat-card:last-child .mini-track{margin-top:7px}.stat-value{font-size:22px}.toolbar{gap:9px}.search-wrap{flex:1 0 100%}.toolbar select{flex:1;min-width:0}.cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.product-card{border-radius:15px}.product-image{height:136px}.product-emoji{font-size:55px}.priority-badge{font-size:9px;padding:6px 7px;top:8px;left:8px}.img-action{display:none}.product-info{padding:13px 11px}.product-category{font-size:9px}.product-name{font-size:13px;min-height:36px;margin:6px 0 7px}.product-price{font-size:14px}.status-badge{font-size:8px;padding:5px}.dialog-overlay{align-items:end;padding:0}.dialog{max-height:93dvh;border-radius:22px 22px 0 0}.dialog-head{padding:19px 19px 16px}.dialog-body{padding:19px 18px 12px}.dialog-footer{padding:14px 18px calc(17px + env(safe-area-inset-bottom))}.form-grid{grid-template-columns:1fr}.field.span2{grid-column:span 1}.dialog-head h2{font-size:26px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <div class="app-shell" id="appShell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="Wishlist, ke beranda"><span class="brand-symbol"><span class="ico" data-icon="heart"></span></span><span class="brand-name">wishlist<b>.</b></span></a>
+      <div class="nav-label">MENU UTAMA</div>
+      <nav class="side-nav" aria-label="Navigasi wishlist">
+        <button class="nav-btn active" type="button" data-view="all"><span class="ico" data-icon="grid"></span>Semua wishlist<span class="nav-count" id="navAll">0</span></button>
+        <button class="nav-btn" type="button" data-view="urgent"><span class="ico" data-icon="flame"></span>Prioritas utama<span class="nav-count" id="navUrgent">0</span></button>
+        <button class="nav-btn" type="button" data-view="want"><span class="ico" data-icon="heart"></span>Ingin dibeli<span class="nav-count" id="navWant">0</span></button>
+        <button class="nav-btn" type="button" data-view="bought"><span class="ico" data-icon="check"></span>Sudah dibeli<span class="nav-count" id="navBought">0</span></button>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-note"><strong>Little reminder ✨</strong><p>Nggak semua keinginan harus sekarang. Simpan dulu, wujudkan nanti.</p></div>
+      <div class="side-footer"><span class="connect-dot" id="sideDot"></span><span id="sideState">Menyiapkan ruangmu...</span></div>
+    </aside>
+    <main class="workspace">
+      <div class="topbar">
+        <div class="crumb">My space <span style="color:#c5cfc5;padding:0 7px">/</span> <strong>Wishlist</strong></div>
+        <div class="top-actions">
+          <span class="mode-pill" id="modePill">● Menghubungkan...</span>
+          <button type="button" class="btn primary desktop-add" id="topAdd"><span class="ico" data-icon="plus"></span> Tambah barang</button>
+          <span class="avatar" aria-hidden="true">W.</span>
+        </div>
+      </div>
+      <section class="hero" aria-label="Sambutan">
+        <div class="hero-copy">
+          <div class="eyebrow">A SPACE FOR YOUR DREAMS</div>
+          <h1>Save it now,<br><em>love it later.</em></h1>
+          <p>Setiap barang impian punya ceritanya. Kumpulkan semua, atur prioritas, dan wujudkan satu per satu.</p>
+          <button class="btn" type="button" id="heroAdd"><span class="ico" data-icon="plus"></span> Tambah wishlist</button>
+        </div>
+        <div class="hero-art" aria-hidden="true"><div class="float-star">✳</div><div class="floating-ticket"><div class="ticket-header"><span>MY LITTLE WISH</span><span>✦ 01</span></div><div class="ticket-heart">💗</div><div class="ticket-bottom"><span>Dream list</span><span>KEEP FOREVER</span></div></div><div class="float-circle"></div></div>
+      </section>
+      <section class="stat-grid" aria-label="Ringkasan wishlist">
+        <article class="stat-card"><div class="stat-top"><span>Total barang impian</span><span class="stat-icon"><span class="ico" data-icon="bag"></span></span></div><div class="stat-value" id="metricCount">0</div><div class="stat-foot">Barang tersimpan di wishlist</div></article>
+        <article class="stat-card"><div class="stat-top"><span>Total estimasi</span><span class="stat-icon peachy"><span class="ico" data-icon="wallet"></span></span></div><div class="stat-value" id="metricPrice">Rp0</div><div class="stat-foot">Nilai semua barang impian</div></article>
+        <article class="stat-card"><div class="stat-top"><span>Impian terwujud</span><span class="stat-icon sun"><span class="ico" data-icon="sparkle"></span></span></div><div class="stat-value" id="metricBought">0 / 0</div><div class="stat-foot" id="progressText">0% wishlist tercapai</div><div class="mini-track"><span id="progressBar"></span></div></article>
+      </section>
+      <section class="collection" id="collection">
+        <div class="collection-head"><div><div class="section-eyebrow">THE COLLECTION</div><h2>Daftar impian <span style="color:var(--coral)">✳</span></h2><p id="resultSubtitle">Semua barang favoritmu ada di sini.</p></div><button type="button" class="btn light" id="sectionAdd"><span class="ico" data-icon="plus"></span>Tambah baru</button></div>
+        <div class="toolbar"><div class="search-wrap"><span class="ico" data-icon="search"></span><input class="control" type="search" id="searchInput" placeholder="Cari nama, kategori, spesifikasi..." aria-label="Cari barang"></div><select class="control" id="categorySelect" aria-label="Filter kategori"><option value="all">Semua kategori</option></select><select class="control" id="sortSelect" aria-label="Urutkan daftar"><option value="new">Terbaru dulu</option><option value="old">Terlama dulu</option><option value="price-desc">Harga tertinggi</option><option value="price-asc">Harga terendah</option><option value="name">Nama A-Z</option></select></div>
+        <div class="chip-row" id="filterChips" aria-label="Filter wishlist"></div>
+        <div class="cards" id="cards"><div class="loading" style="grid-column:1/-1"><span class="spinner"></span><p>Menyiapkan daftar...</p></div></div>
+      </section>
+    </main>
+  </div>
+  <nav class="mobile-nav" aria-label="Navigasi ponsel">
+    <button type="button" data-view="all" class="active"><span class="ico" data-icon="grid"></span>Semua</button>
+    <button type="button" data-view="urgent"><span class="ico" data-icon="flame"></span>Penting</button>
+    <button type="button" class="add-nav" id="mobileAdd" aria-label="Tambah wishlist"><span class="ico" data-icon="plus"></span></button>
+    <button type="button" data-view="bought"><span class="ico" data-icon="check"></span>Dibeli</button>
+    <button type="button" data-view="want"><span class="ico" data-icon="heart"></span>Ingin</button>
+  </nav>
+
+  <div class="overlay dialog-overlay" id="modalOverlay" hidden>
+    <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+      <div class="dialog-head"><div><div class="dialog-eyebrow" id="formEyebrow">NEW WISH</div><h2 id="formTitle">Tambah wishlist baru ✨</h2></div><button class="icon-btn" type="button" id="closeModal" aria-label="Tutup form"><span class="ico" data-icon="x"></span></button></div>
+      <form id="wishForm" style="display:flex;flex-direction:column;min-height:0" autocomplete="off">
+        <div class="dialog-body">
+          <div class="form-grid">
+            <div class="field span2" id="addNameField"><label for="fName">Nama barang <span style="color:#e27e66">*</span></label><input id="fName" maxlength="250" type="text" placeholder="Misalnya: New Balance 530" required></div>
+            <div class="field" id="addCatField"><label for="fCategory">Kategori</label><select id="fCategory"></select></div>
+            <div class="field" id="priceField"><label for="fPrice">Estimasi harga</label><div class="money-input"><span>Rp</span><input id="fPrice" inputmode="numeric" type="text" placeholder="1.700.000" autocomplete="off"></div></div>
+            <div class="field span2"><div class="label">Prioritas</div><div class="radio-group" id="fPriorities"></div></div>
+            <div class="field span2"><div class="label">Status</div><div class="radio-group" id="fStatuses"></div></div>
+            <div class="field span2 add-only"><label>Foto barang <small>(opsional)</small></label><div class="upload-row"><div class="upload-preview" id="uploadPreview">📷</div><div><button type="button" class="btn light" id="uploadBtn" style="padding:9px 13px;font-size:12px"><span class="ico" data-icon="upload"></span> Pilih foto</button><input type="file" hidden id="fFile" accept="image/*"><div class="upload-help">JPG / PNG / WEBP. Foto diperkecil otomatis.</div></div></div></div>
+            <div class="field span2 add-only"><label for="fImageUrl">Atau URL gambar <small>(opsional)</small></label><input id="fImageUrl" type="url" placeholder="https://contoh.com/gambar.jpg"></div>
+            <div class="field span2 add-only"><label for="fLink">Link produk <small>(opsional)</small></label><input id="fLink" type="url" placeholder="https://shopee.co.id/..."></div>
+            <div class="field span2 add-only"><label for="fSpecs">Spesifikasi <small>(opsional)</small></label><textarea id="fSpecs" placeholder="Warna, ukuran, varian yang kamu inginkan..."></textarea></div>
+            <div class="field span2 add-only"><label for="fNotes">Keterangan <small>(opsional)</small></label><textarea id="fNotes" placeholder="Catatan kecil untuk diri sendiri..."></textarea></div>
+          </div>
+        </div>
+        <div class="dialog-footer"><span class="form-message" id="formMessage" role="alert"></span><button type="button" class="btn light" id="cancelModal">Batal</button><button type="submit" class="btn primary" id="submitWish"><span class="ico" data-icon="check"></span><span id="submitLabel">Simpan wishlist</span></button></div>
+      </form>
+    </section>
+  </div>
+
+  <div class="overlay drawer-overlay" id="drawerOverlay" hidden>
+    <section class="drawer" role="dialog" aria-modal="true" aria-labelledby="detailName">
+      <div class="drawer-header"><strong style="font-size:12px;letter-spacing:1px">WISHLIST DETAILS ✦</strong><button class="icon-btn" type="button" id="closeDrawer" aria-label="Tutup detail"><span class="ico" data-icon="x"></span></button></div>
+      <div id="drawerContent"></div>
+    </section>
+  </div>
+
+  <div class="overlay auth-overlay" id="authOverlay" hidden>
+    <section class="auth-card" aria-labelledby="authTitle" role="dialog" aria-modal="true">
+      <div class="auth-logo"><span class="ico" data-icon="heart" style="width:26px;height:26px"></span></div>
+      <div class="section-eyebrow" style="margin-bottom:7px">YOUR PRIVATE SPACE</div>
+      <h2 id="authTitle">Welcome to your wishlist.</h2>
+      <p>Masukkan password koneksi Google Apps Script untuk membuka wishlist pribadi yang tersimpan di spreadsheet.</p>
+      <form id="loginForm">
+        <label for="authPassword">Password</label><input id="authPassword" type="password" required placeholder="Masukkan password" autocomplete="current-password">
+        <div class="auth-error" id="authError" role="alert" hidden></div>
+        <button class="btn primary full" id="loginBtn" type="submit">Buka wishlist <span class="ico" data-icon="arrow"></span></button>
+      </form>
+      <div class="auth-alt">Mau lihat tampilannya dulu? <button type="button" id="demoBtn">Coba mode demo</button></div>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+"use strict";
+/*
+ * Wishlist UI remake. Works with the ORIGINAL Code.gs:
+ * getInitData, addWish, updateWish, deleteWish, getImageData.
+ * Apps Script HtmlService uses native google.script.run;
+ * external static hosting uses the same POST JSON API as the uploaded original.
+ */
+const API_URL = 'https://script.google.com/macros/s/AKfycbxdgFeJrXyBAQdqov3bQ8JZXwZ7A-xNxLsEf8QVlwUs3mlFiqpxTQEBK_Yll4LhDulY/exec';
+const OPT_DEFAULT = {
+  kategori:['💻🛵 Aksesoris','👕 Fashion','👟 Sepatu','🔧 Peralatan','🍜 Makanan & Minuman','📱 Elektronik','🏠 Furniture','📚 Buku & Edukasi','🧴🧼 Perawatan'],
+  prioritas:['🔴 Penting','🟡 Ga Terlalu','🟢 Pingin'],
+  status:['🛒 Mau Beli','🙏 Belum','✅ Sudah Dibeli','❌ Batal']
+};
+const SAMPLE = [
+  {row:11,barang:'NEW BALANCE 530',kategori:'👟 Sepatu',harga:1799000,prioritas:'🔴 Penting',status:'🛒 Mau Beli',spek:'CREAM / SILVER, SIZE 40',ket:'MENUNGGU DISKON',link:'',img:'',hasImg:false},
+  {row:10,barang:'FUJIFILM INSTAX MINI 12',kategori:'📱 Elektronik',harga:1199000,prioritas:'🟡 Ga Terlalu',status:'🙏 Belum',spek:'LILAC PURPLE',ket:'',link:'',img:'',hasImg:false},
+  {row:9,barang:'KINDLE PAPERWHITE',kategori:'📚 Buku & Edukasi',harga:2499000,prioritas:'🔴 Penting',status:'🙏 Belum',spek:'16GB, BLACK',ket:'BUAT BACA BUKU TIAP MALAM',link:'',img:'',hasImg:false},
+  {row:8,barang:'TAS TOTE CANVAS',kategori:'👕 Fashion',harga:189000,prioritas:'🟢 Pingin',status:'✅ Sudah Dibeli',spek:'OFF WHITE',ket:'SUDAH SAMPAI!',link:'',img:'',hasImg:false},
+  {row:7,barang:'MEJA SAMPING MINIMALIS',kategori:'🏠 Furniture',harga:575000,prioritas:'🟡 Ga Terlalu',status:'🛒 Mau Beli',spek:'KAYU OAK, 40CM',ket:'',link:'',img:'',hasImg:false},
+  {row:6,barang:'HEADPHONE WIRELESS',kategori:'💻🛵 Aksesoris',harga:849000,prioritas:'🟢 Pingin',status:'🙏 Belum',spek:'WARNA HIJAU',ket:'',link:'',img:'',hasImg:false}
+];
+const icons = {
+  heart:'<path d="M20.8 4.6a5.6 5.6 0 0 0-7.9 0L12 5.5l-.9-.9a5.6 5.6 0 0 0-7.9 7.9l.9.9L12 21l7.9-7.6.9-.9a5.6 5.6 0 0 0 0-7.9Z"/>',
+  grid:'<rect x="3" y="3" width="7" height="7" rx="1.4"/><rect x="14" y="3" width="7" height="7" rx="1.4"/><rect x="3" y="14" width="7" height="7" rx="1.4"/><rect x="14" y="14" width="7" height="7" rx="1.4"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>', x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  check:'<path d="m4.5 12 5 5 10-10"/>',arrow:'<path d="M5 12h14m-6-6 6 6-6 6"/>',
+  flame:'<path d="M12 22c4.4 0 7-2.8 7-7 0-3.4-2-6-3.5-7-.3 2.4-1.2 3.5-2.3 4.2C13 8 11 4.2 8.5 2 8 5.8 7.1 7 5.2 10 4.4 11.3 4 13 4 15c0 4.2 3.2 7 8 7Z"/>',
+  bag:'<path d="M4 8h16l-1 13H5L4 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/>',
+  wallet:'<rect x="3" y="6" width="18" height="15" rx="2"/><path d="M3 10h18M6 6V4a1 1 0 0 1 1-1h11"/>',
+  sparkle:'<path d="m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5L12 2Z"/>',
+  search:'<circle cx="10.7" cy="10.7" r="6.5"/><path d="m16 16 5 5"/>',
+  upload:'<path d="M12 16V3m-5 5 5-5 5 5"/><path d="M4 15v5h16v-5"/>',
+  edit:'<path d="M12 20H4v-8l11-9a3 3 0 0 1 4 4L8 18"/><path d="M14 4l6 6"/>',
+  trash:'<path d="M4 7h16m-10-3h4M6 7l1 14h10l1-14M10 11v6m4-6v6"/>',
+  external:'<path d="M14 4h6v6M20 4l-9 9"/><path d="M20 14v6H4V4h6"/>'
+};
+function icon(name){return '<span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true">'+(icons[name]||icons.heart)+'</svg></span>'}
+document.querySelectorAll('[data-icon]').forEach(e=>{e.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+(icons[e.dataset.icon]||icons.heart)+'</svg>'});
+const $=id=>document.getElementById(id);
+let ephemeralToken='';
+function getToken(){try{return sessionStorage.getItem('wishlist_session_token')||ephemeralToken}catch{return ephemeralToken}}
+function setToken(value){ephemeralToken=value||'';try{if(value)sessionStorage.setItem('wishlist_session_token',value);else sessionStorage.removeItem('wishlist_session_token')}catch{}}
+const state={wishes:[],opts:OPT_DEFAULT,mode:'loading',view:'all',category:'all',query:'',sort:'new',editing:null,detail:null,imageBase64:'',working:false};
+const rupiah=n=>'Rp'+Number(n||0).toLocaleString('id-ID');
+const digitFmt=v=>String(v||'').replace(/\D/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safeUrl=v=>/^https?:\/\/\S+$/i.test(String(v||''))?String(v):'';
+const catIcon=c=>/sepatu/i.test(c)?'👟':/elektronik/i.test(c)?'📷':/fashion/i.test(c)?'👜':/furniture/i.test(c)?'🪑':/buku/i.test(c)?'📚':/perawatan/i.test(c)?'🧴':/makanan/i.test(c)?'🍵':/peralatan/i.test(c)?'🔧':'🎧';
+const categoryText=c=>String(c||'Tanpa kategori').replace(/^[^A-Za-z0-9]+\s*/,'').trim();
+const isBought=w=>/sudah dibeli/i.test(String(w.status||''));
+const isCancelled=w=>/batal/i.test(String(w.status||''));
+const isWanted=w=>/mau beli|belum/i.test(String(w.status||''));
+const isUrgent=w=>/penting/i.test(String(w.prioritas||''))&&!/terlalu/i.test(String(w.prioritas||''));
+const priorityClass=p=>/🔴|^penting/i.test(String(p||''))?'urgent':/🟡|terlalu/i.test(String(p||''))?'normal':'low';
+const priorityLabel=p=>String(p||'Tanpa prioritas').replace(/^[^A-Za-z]+\s*/,'').trim();
+let toastTimer;
+function toast(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,3300)}
+function nativeRun(){return !!(window.google&&window.google.script&&window.google.script.run&&typeof window.google.script.run.withSuccessHandler==='function')}
+function sampleInit(){
+  try{const items=JSON.parse(localStorage.getItem('wishlist_redesign_demo')||'null');return Array.isArray(items)?items:SAMPLE.map(x=>({...x}))}catch{return SAMPLE.map(x=>({...x}))}
+}
+let demoWishes=sampleInit();
+function persistDemo(){try{localStorage.setItem('wishlist_redesign_demo',JSON.stringify(demoWishes))}catch{}}
+async function runApi(name,args=[]){
+  if(state.mode==='demo'){
+    await new Promise(r=>setTimeout(r,220));
+    if(name==='getInitData')return {options:OPT_DEFAULT,wishes:demoWishes.map(x=>({...x}))};
+    if(name==='getImageData')return '';
+    if(name==='addWish'){
+      const d=args[0],row=Math.max(5,...demoWishes.map(x=>x.row))+1;
+      demoWishes.unshift({row,barang:String(d.barang||'').toUpperCase(),kategori:d.kategori,harga:Number(d.harga)||0,prioritas:d.prioritas,status:d.status,spek:d.spesifikasi,ket:d.keterangan,link:d.link,img:d.imageBase64||d.imageUrl||'',hasImg:!!(d.imageBase64||d.imageUrl)});persistDemo();
+      return{row,gambar:!!(d.imageBase64||d.imageUrl),wishes:demoWishes.map(x=>({...x}))};
+    }
+    if(name==='updateWish'){const w=demoWishes.find(x=>x.row===args[0]&&x.barang===args[1]);if(!w)throw Error('Barang tidak ditemukan.');Object.assign(w,args[2],{harga:Number(args[2].harga)||0});persistDemo();return{wishes:demoWishes.map(x=>({...x}))}}
+    if(name==='deleteWish'){const ix=demoWishes.findIndex(x=>x.row===args[0]&&x.barang===args[1]);if(ix<0)throw Error('Barang tidak ditemukan.');demoWishes.splice(ix,1);persistDemo();return{wishes:demoWishes.map(x=>({...x}))}}
+    throw Error('Fungsi demo belum tersedia.');
+  }
+  if(nativeRun())return new Promise((resolve,reject)=>{window.google.script.run.withSuccessHandler(resolve).withFailureHandler(e=>reject(new Error(e?.message||String(e))))[name](...args)});
+  const token=getToken();
+  if(!token)throw Error('Password belum dimasukkan.');
+  let res;
+  try{res=await fetch(API_URL,{method:'POST',body:JSON.stringify({fn:name,args,token})})}catch(e){throw Error('Koneksi Apps Script gagal. Jika memakai hosting eksternal, periksa izin akses/CORS atau gunakan deployment Apps Script.')}
+  if(!res.ok)throw Error('Server mengembalikan status '+res.status);
+  let json;try{json=await res.json()}catch{throw Error('Respons API bukan JSON. Cek URL /exec dan deployment.')}
+  if(json.error)throw Error(json.error);
+  return json.result;
+}
+function updateConnection(){
+  const demo=state.mode==='demo';
+  $('modePill').textContent=demo?'✦ Mode Demo':state.mode==='connected'?'● Terhubung ke Sheet':'● Menghubungkan...';
+  $('sideState').textContent=demo?'Data contoh • hanya di browser':state.mode==='connected'?'Tersambung ke Google Sheets':'Menyiapkan ruangmu...';
+  $('sideDot').className='connect-dot '+(demo?'demo':state.mode==='connected'?'good':'');
+}
+async function loadData(){
+  $('cards').innerHTML='<div class="loading" style="grid-column:1/-1"><span class="spinner"></span><p>Sedang memuat wishlist...</p></div>';
+  updateConnection();
+  try{
+    const data=await runApi('getInitData');
+    if(!data||!Array.isArray(data.wishes)||!data.options)throw Error('Format respons data tidak sesuai.');
+    state.opts=data.options;state.wishes=data.wishes;
+    if(state.mode!=='demo')state.mode='connected';
+    $('authOverlay').hidden=true;updateConnection();fillFormChoices();render();
+  }catch(err){
+    if(/password/i.test(err.message)&&state.mode!=='demo'){setToken('');openAuth('Password salah. Silakan coba lagi.');return}
+    $('cards').innerHTML='<div class="empty-state"><div class="empty-icon">📡</div><h3>Belum bisa tersambung</h3><p>'+esc(err.message)+'</p><button type="button" class="btn primary" id="retryLoad">Coba lagi</button> <button type="button" class="btn light" id="startDemoFromError">Lihat demo</button></div>';
+    $('retryLoad').onclick=loadData;$('startDemoFromError').onclick=activateDemo;
+    updateConnection();toast('Gagal memuat data.');
+  }
+}
+function openAuth(message=''){$('authOverlay').hidden=false;$('authError').hidden=!message;$('authError').textContent=message;$('authPassword').focus()}
+function activateDemo(){state.mode='demo';state.view='all';state.category='all';state.query='';$('searchInput').value='';demoWishes=sampleInit();loadData();toast('Mode demo aktif — perubahan hanya tersimpan di browser ini.')}
+$('loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();const value=$('authPassword').value.trim();
+  if(!value)return;$('authError').hidden=true;$('loginBtn').disabled=true;
+  setToken(value);
+  try{const d=await runApi('getInitData');if(!d?.options)throw Error('Data server tidak sesuai.');state.opts=d.options;state.wishes=d.wishes||[];state.mode='connected';$('authOverlay').hidden=true;fillFormChoices();render();updateConnection()}
+  catch(err){setToken('');$('authError').textContent=err.message;$('authError').hidden=false}
+  finally{$('loginBtn').disabled=false}
+});
+$('demoBtn').onclick=activateDemo;
+function choiceGroup(id,name,opts,active){
+  $(id).innerHTML=(opts||[]).map((v,i)=>'<label class="radio-pill"><input type="radio" name="'+esc(name)+'" value="'+esc(v)+'" '+(v===active||(!active&&i===0)?'checked':'')+'><span>'+esc(v)+'</span></label>').join('');
+}
+function fillFormChoices(){
+  const current=$('fCategory').value;
+  $('fCategory').innerHTML=state.opts.kategori.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join('');
+  if(state.opts.kategori.includes(current))$('fCategory').value=current;
+  const cats=[...new Set(state.opts.kategori.concat(state.wishes.map(w=>w.kategori).filter(Boolean)))];
+  const chosen=state.category;$('categorySelect').innerHTML='<option value="all">Semua kategori</option>'+cats.map(x=>'<option value="'+esc(x)+'">'+esc(categoryText(x))+'</option>').join('');
+  $('categorySelect').value=cats.includes(chosen)?chosen:'all';state.category=$('categorySelect').value;
+}
+function visibleItems(){
+  let a=state.wishes.filter(w=>{
+    const matchView=state.view==='all'||(state.view==='urgent'&&isUrgent(w))||(state.view==='want'&&isWanted(w))||(state.view==='bought'&&isBought(w));
+    const q=state.query;
+    return matchView&&(state.category==='all'||w.kategori===state.category)&&(!q||[w.barang,w.kategori,w.spek,w.ket].join(' ').toLowerCase().includes(q));
+  });
+  if(state.sort==='new')a=a.slice().sort((a,b)=>b.row-a.row);
+  else if(state.sort==='old')a=a.slice().sort((a,b)=>a.row-b.row);
+  else if(state.sort==='price-desc')a=a.slice().sort((a,b)=>b.harga-a.harga);
+  else if(state.sort==='price-asc')a=a.slice().sort((a,b)=>a.harga-b.harga);
+  else if(state.sort==='name')a=a.slice().sort((a,b)=>String(a.barang).localeCompare(String(b.barang),'id'));
+  return a;
+}
+const imgCache=new Map(),imgPending=new Map();
+function imageSrc(w){return imgCache.get(w.row)||safeUrl(w.img)||''}
+async function imageFallback(row){
+  if(imgPending.has(row))return imgPending.get(row);
+  const task=(async()=>{try{const data=await runApi('getImageData',[row]);if(data&&/^data:image\//i.test(data)){imgCache.set(row,data);document.querySelectorAll('img[data-image-row="'+row+'"]').forEach(img=>{img.src=data;img.hidden=false;img.nextElementSibling&&(img.nextElementSibling.hidden=true)})}else{imgCache.set(row,'')}}catch{}finally{imgPending.delete(row)}})();
+  imgPending.set(row,task);return task;
+}
+function registerImages(root=document){
+  root.querySelectorAll('img[data-image-row]').forEach(img=>{
+    img.onerror=()=>{img.hidden=true;const fallback=img.nextElementSibling;if(fallback)fallback.hidden=false;if(!img.dataset.tried&&state.mode!=='demo'){img.dataset.tried='1';imageFallback(Number(img.dataset.imageRow))}};
+    img.onload=()=>{img.hidden=false;const fb=img.nextElementSibling;if(fb)fb.hidden=true};
+  });
+}
+function artwork(w,detail=false){
+  const src=imageSrc(w),shade=Math.abs([...String(w.barang||'')].reduce((a,c)=>a+c.charCodeAt(0),0))%6;
+  const hasPicture=!!(src||w.hasImg);
+  const tag=detail?'drawer-cover':'product-image';
+  const alt=esc(w.barang||'Foto barang');
+  return '<div class="'+tag+'" data-color="'+shade+'">'+(hasPicture?'<img loading="lazy" data-image-row="'+w.row+'" src="'+esc(src)+'" alt="'+alt+'" '+(!src?'hidden':'')+'>':'')+'<span class="product-emoji" '+(src?'hidden':'')+' aria-hidden="true">'+catIcon(w.kategori)+'</span>'+
+    (!detail?'<span class="priority-badge '+priorityClass(w.prioritas)+'">'+esc(w.prioritas||'Tanpa prioritas')+'</span><span class="img-action">'+icon('arrow')+'</span>':'')+'</div>';
+}
+function statusStyle(w){return isBought(w)?'bought':isCancelled(w)?'cancel':/mau beli/i.test(w.status)?'want':''}
+function cardHTML(w){
+  return '<article class="product-card">'+
+    '<button class="product-open" data-open="'+w.row+'" type="button" aria-label="Lihat '+esc(w.barang)+'">'+
+    artwork(w)+'</button><div class="product-info"><div class="product-category">'+esc(categoryText(w.kategori))+'</div>'+
+    '<button class="product-open" data-open="'+w.row+'" type="button"><div class="product-name">'+esc(w.barang)+'</div></button>'+
+    '<div class="product-bottom"><div class="product-price">'+rupiah(w.harga)+'</div><span class="status-badge '+statusStyle(w)+'">'+esc(w.status||'Tanpa status')+'</span></div></div></article>';
+}
+function render(){
+  const total=state.wishes.reduce((s,w)=>s+(Number(w.harga)||0),0);
+  const bought=state.wishes.filter(isBought).length,n=state.wishes.length;
+  $('metricCount').textContent=n;
+  $('metricPrice').textContent=rupiah(total);
+  $('metricBought').textContent=bought+' / '+n;
+  const percent=n?Math.round(100*bought/n):0;
+  $('progressText').textContent=percent+'% wishlist tercapai';$('progressBar').style.width=percent+'%';
+  $('navAll').textContent=n;$('navUrgent').textContent=state.wishes.filter(isUrgent).length;$('navWant').textContent=state.wishes.filter(isWanted).length;$('navBought').textContent=bought;
+  const views=[['all','Semua',n],['urgent','🔴 Penting',state.wishes.filter(isUrgent).length],['want','🛒 Ingin dibeli',state.wishes.filter(isWanted).length],['bought','✅ Sudah dibeli',bought]];
+  $('filterChips').innerHTML=views.map(([k,label,count])=>'<button type="button" data-view="'+k+'" class="chip '+(state.view===k?'active':'')+'" aria-pressed="'+(state.view===k)+'">'+label+' · '+count+'</button>').join('');
+  document.querySelectorAll('.nav-btn,.mobile-nav button[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===state.view));
+  const visible=visibleItems();
+  $('resultSubtitle').textContent=visible.length+' dari '+n+' barang · '+rupiah(visible.reduce((s,w)=>s+(Number(w.harga)||0),0));
+  $('cards').innerHTML=visible.length?visible.map(cardHTML).join(''):'<div class="empty-state"><div class="empty-icon">🪴</div><h3>Belum ada barang di sini</h3><p>Coba ganti filter atau mulai tambahkan barang impianmu.</p><button class="btn primary" type="button" id="emptyAdd">'+icon('plus')+' Tambah wishlist</button></div>';
+  if($('emptyAdd'))$('emptyAdd').onclick=()=>openModal();
+  registerImages($('cards'));
+  state.wishes.filter(w=>w.hasImg&&!imageSrc(w)).slice(0,12).forEach(w=>{if(state.mode!=='demo')imageFallback(w.row)});
+}
+function switchView(view){state.view=view;render();if(window.matchMedia('(max-width:760px)').matches)$('collection').scrollIntoView({behavior:'smooth',block:'start'})}
+document.addEventListener('click',e=>{const b=e.target.closest('button[data-view]');if(b)switchView(b.dataset.view);const open=e.target.closest('button[data-open]');if(open)openDetails(Number(open.dataset.open))});
+$('searchInput').oninput=e=>{state.query=e.target.value.trim().toLowerCase();render()};
+$('categorySelect').onchange=e=>{state.category=e.target.value;render()};
+$('sortSelect').onchange=e=>{state.sort=e.target.value;render()};
+function scrollLock(on){document.body.style.overflow=on?'hidden':''}
+function openModal(w=null){
+  state.editing=w?.row??null;state.imageBase64='';$('wishForm').reset();
+  const edit=!!w;
+  $('formTitle').textContent=edit?'Edit wishlist':'Tambah wishlist baru ✨';
+  $('formEyebrow').textContent=edit?'UPDATE WISH':'NEW WISH';
+  $('submitLabel').textContent=edit?'Simpan perubahan':'Simpan wishlist';
+  $('formMessage').textContent='';
+  document.querySelectorAll('.add-only').forEach(el=>el.hidden=edit);
+  $('addNameField').hidden=edit;$('addCatField').hidden=edit;
+  $('fName').required=!edit;
+  if(edit){$('fPrice').value=digitFmt(w.harga)}
+  else{$('fPrice').value='';setUploadPreview('')}
+  choiceGroup('fPriorities','priority',state.opts.prioritas,edit?w.prioritas:state.opts.prioritas[1]);
+  choiceGroup('fStatuses','status',state.opts.status,edit?w.status:state.opts.status[1]);
+  $('modalOverlay').hidden=false;scrollLock(true);
+  setTimeout(()=>{(edit?$('fPrice'):$('fName')).focus()},70);
+}
+function closeModal(){$('modalOverlay').hidden=true;state.editing=null;state.imageBase64='';$('fFile').value='';scrollLock(!$('drawerOverlay').hidden)}
+function findWish(row){return state.wishes.find(x=>x.row===row)}
+function openDetails(row){
+  const w=findWish(row);if(!w)return;state.detail=w.row;
+  const more=(title,value)=>value?'<div class="detail-block"><small>'+title+'</small><p>'+esc(value)+'</p></div>':'';
+  $('drawerContent').innerHTML=artwork(w,true)+'<div class="drawer-main"><div class="section-eyebrow">'+esc(categoryText(w.kategori))+'</div><h2 id="detailName">'+esc(w.barang)+'</h2>'+
+    '<div class="drawer-price">'+rupiah(w.harga)+'</div>'+
+    '<div class="detail-grid"><div class="detail-tile"><small>Prioritas</small><b>'+esc(w.prioritas||'—')+'</b></div><div class="detail-tile"><small>Status</small><b>'+esc(w.status||'—')+'</b></div></div>'+
+    more('SPESIFIKASI',w.spek)+more('KETERANGAN',w.ket)+
+    (safeUrl(w.link)?'<a href="'+esc(safeUrl(w.link))+'" target="_blank" rel="noopener noreferrer" class="btn light full" style="margin-top:19px">'+icon('external')+' Lihat produk di toko</a>':'')+
+    '<div class="drawer-actions"><button type="button" class="btn primary" id="editDetails">'+icon('edit')+' Edit barang</button><button type="button" class="btn danger" id="deleteDetails">'+icon('trash')+' Hapus</button></div>'+
+    '<div id="deleteConfirm" hidden style="border:1px solid #f4d6d2;border-radius:13px;background:#fff7f4;padding:14px;font-size:12px"><strong>Hapus barang ini secara permanen?</strong><p style="color:#987a74">Tindakan ini juga menghapus baris di spreadsheet.</p><div style="display:flex;gap:8px"><button type="button" class="btn danger" id="confirmDelete">Ya, hapus</button><button type="button" class="btn light" id="cancelDelete">Batal</button></div></div></div>';
+  $('drawerOverlay').hidden=false;scrollLock(true);registerImages($('drawerContent'));
+  $('editDetails').onclick=()=>{closeDetails();openModal(w)};
+  $('deleteDetails').onclick=()=>{$('deleteConfirm').hidden=false;$('deleteDetails').hidden=true};
+  $('cancelDelete').onclick=()=>{$('deleteConfirm').hidden=true;$('deleteDetails').hidden=false};
+  $('confirmDelete').onclick=async()=>{
+    if(state.working)return;state.working=true;$('confirmDelete').disabled=true;$('confirmDelete').textContent='Menghapus...';
+    try{const result=await runApi('deleteWish',[w.row,w.barang]);state.wishes=result.wishes||[];imgCache.clear();imgPending.clear();closeDetails();fillFormChoices();render();toast('Barang berhasil dihapus.')}
+    catch(err){toast('Gagal menghapus: '+err.message);$('confirmDelete').disabled=false;$('confirmDelete').textContent='Ya, hapus'}
+    finally{state.working=false}
+  };
+}
+function closeDetails(){$('drawerOverlay').hidden=true;state.detail=null;scrollLock(!$('modalOverlay').hidden)}
+$('closeDrawer').onclick=closeDetails;$('closeModal').onclick=closeModal;$('cancelModal').onclick=closeModal;
+$('modalOverlay').addEventListener('click',e=>{if(e.target===$('modalOverlay'))closeModal()});
+$('drawerOverlay').addEventListener('click',e=>{if(e.target===$('drawerOverlay'))closeDetails()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('modalOverlay').hidden)closeModal();else if(!$('drawerOverlay').hidden)closeDetails()}});
+['topAdd','heroAdd','sectionAdd','mobileAdd'].forEach(id=>$(id).onclick=()=>openModal());
+$('fPrice').addEventListener('input',e=>{
+  const inp=e.target,before=inp.value.slice(0,inp.selectionStart).replace(/\D/g,'').length;
+  inp.value=digitFmt(inp.value);let pos=0,count=0;while(pos<inp.value.length&&count<before){if(/\d/.test(inp.value[pos]))count++;pos++}inp.setSelectionRange(pos,pos);
+});
+function setUploadPreview(src){$('uploadPreview').style.backgroundImage=src?'url("'+src.replace(/"/g,'%22')+'")':'';$('uploadPreview').textContent=src?'':'📷'}
+function shrink(file){return new Promise((resolve,reject)=>{
+  if(file.size>18*1024*1024)return reject(Error('Maksimum foto 18 MB.'));
+  const img=new Image(),url=URL.createObjectURL(file);
+  img.onload=()=>{const k=Math.min(1,640/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.width*k));c.height=Math.max(1,Math.round(img.height*k));c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);resolve(c.toDataURL('image/jpeg',.82))};
+  img.onerror=()=>{URL.revokeObjectURL(url);reject(Error('Gambar tidak bisa dibaca.'))};img.src=url;
+})}
+$('uploadBtn').onclick=()=>$('fFile').click();
+$('fFile').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{state.imageBase64=await shrink(f);$('fImageUrl').value='';setUploadPreview(state.imageBase64)}catch(err){$('formMessage').textContent=err.message}};
+$('fImageUrl').oninput=e=>{
+  const v=e.target.value.trim();if(/^data:image\//i.test(v)){state.imageBase64=v;e.target.value='';setUploadPreview(v)}
+  else{state.imageBase64='';$('fFile').value='';setUploadPreview(v)}
+};
+$('wishForm').onsubmit=async e=>{
+  e.preventDefault();if(state.working)return;
+  const checked=name=>document.querySelector('input[name="'+name+'"]:checked')?.value||'';
+  const w=state.editing!==null?findWish(state.editing):null;
+  const data={
+    barang:$('fName').value.trim().toUpperCase(),kategori:$('fCategory').value,
+    harga:$('fPrice').value.replace(/\D/g,''),prioritas:checked('priority'),status:checked('status'),
+    imageUrl:$('fImageUrl').value.trim(),imageBase64:state.imageBase64,
+    link:$('fLink').value.trim(),spesifikasi:$('fSpecs').value.trim().toUpperCase(),keterangan:$('fNotes').value.trim().toUpperCase()
+  };
+  if(!w&&!data.barang){$('formMessage').textContent='Nama barang wajib diisi.';return}
+  state.working=true;$('submitWish').disabled=true;$('cancelModal').disabled=true;$('formMessage').textContent='';
+  $('submitLabel').textContent='Menyimpan...';
+  try{
+    const result=w?await runApi('updateWish',[w.row,w.barang,{harga:data.harga,prioritas:data.prioritas,status:data.status}]):await runApi('addWish',[data]);
+    state.wishes=result.wishes||[];imgCache.clear();imgPending.clear();
+    state.view='all';state.category='all';state.query='';$('searchInput').value='';
+    closeModal();fillFormChoices();render();
+    toast(w?'Perubahan berhasil disimpan ✨':result.gambar?'Wishlist baru berhasil disimpan ✨':'Wishlist tersimpan. Foto bisa ditambahkan via URL atau upload.');
+  }catch(err){$('formMessage').textContent='Gagal menyimpan: '+err.message}
+  finally{state.working=false;$('submitWish').disabled=false;$('cancelModal').disabled=false;$('submitLabel').textContent=w?'Simpan perubahan':'Simpan wishlist'}
+};
+(async function boot(){
+  updateConnection();
+  if(nativeRun()){state.mode='connected';await loadData()}
+  else if(getToken()){state.mode='connected';await loadData()}
+  else{openAuth()}
+})();
+</script>
+</body>
+</html>
